@@ -1,0 +1,987 @@
+Java certification course
+
+* vt kollaseks tehtud osad Thinking in Java raamatust. Kopeeri neid siia.
+
+
+Section 2:
+don't use default package. can't import classes from there
+src
+	academy <- default package
+		learnprogramming
+		
+exam: 	check if necessary classes are importer
+		rewrite (on paper) ugly code for better understanding
+		check for missing (closing) brackets
+	
+import static java.lang.System.out;
+out.println("this works");
+
+8 primitives: boolean, byte, short, int, long, double, float, char
+double is default for decimal numbers
+
+long max = 32123456789; // compilation error. all whole numbers are interpreted as integers by default and then converted if necessary. this number is too large for int.
+
+sobib long n = 2_300; // this compiles and equals 2300
+
+octal numbers 0-7
+int firstOct = 010; // 8 in decimal
+System.out.println(firstOct); // 8
+
+hexadecimal (0-9 and A-F)
+int firstHex = 0xF; // 15 decimal
+Int.toHexString(45) -> "2d"
+
+on exam:	don't need to know how to converted
+			need to recognize valid literals
+			
+float myNumber = 25.4; // compilation error: default decimal is double
+float myNumber = 25.4F; // compiles
+
+doesn't compile: 10_.25 and 10._25 and _10.25 and 10.25_
+
+decimal numbers can be in hexadecimal notation
+double hexPi = 0x1.91eb851eb851fpl; // 3.14
+
+double scientific = 5.000125E03; // 5000.125
+double scientific = 5.000125E3; // 5000.125
+
+char literal must be max one character
+char myChar1 = 'a'; // compiles
+char myChar2 = 'ab'; // doesn't compile
+char unicodeChar = '\u03A9'; // upper case omega
+char romanNumber = 'u216C'; // roman 50
+
+double scientific = 5.000125E03; // 5000.125
+
+double d1, d2; // compiles
+double d1, double d2; // won't compile
+int i1; i2; // won't compile
+
+primitives cannot be null
+Integer can be null
+default initialization values for primitives are 0, 0.0, false and ''
+
+{
+int myInt = 10;
+}
+System.out.println( myInt ); // won't compile. out of scope. myInt is local to code block {...}
+on exam: pay attention to variable scope
+
+element ordering: package -> imports -> class _-> variables, methods
+
+Integer myInteger = new Integer (10); // warning: unnecessary boxing
+boxing: converting primitive to wrapper
+int myInt = myInteger; // unboxing
+
+System.out.println("Sum is " + myInteger1 + myInteger2); // concatenates String
+System.out.println("Sum is " + (myInteger1 + myInteger2) ); // prints sum
+int x = 5; 
+double y = 10.55;
+System.out.println("x + y = " + x + y); // x + y = 510.55
+
+Java benefits:
+Object oriented
+encapsulation: access modifiers
+platform independent: compiles to bytecode
+robust: Java prevents memory leaks and does garbage collection on its own
+Java runs in JVM. This increases security
+
+exam question examples:
+valid identifiers: A$B, _hello, Public (valid because upper case)
+invalid indentifiers: false, java.util (dot is illegal), 19_abs (names can't start with numbers)
+primitives don't have methods
+local variables are not initialized by default
+Java doesn't have pointers to specific locations in memory
+
+
+Section 3:
+Operators expression++, ++expression, +, -, %, !, >>, >>>, ...
+--a means decrement a by 1 and then use the result
+a-- means use a and then decrement by 1
+
+numeric promotion: 
+when two primitive values have different data types, Java will automatically promote one of the values to the larger data types
+small data types (byte, short, char) are first promoted to int any time they are used with binary arithmetic operator, even when neither of the operands is int
+
+casting is converting "bigger" type to "smaller" type and must be done manually
+
+Q: what is the data type of x + y?
+double x = 44.25;
+float y = 3.35;
+A: will not compile because default data type of decimal numbers is double
+
+Q: what is the data type of x + y?
+short x = 14;
+short y = 6;
+A: x and y both cast to int before used so result is type int
+
+int myInt = 5;
+int otherInt = ++myInt; // pre-increment
+// now myInt and otherInt are both 6
+int myInt = 5;
+int newOtherInt = myInt++; // post-increment
+// now myInt is 6 and newOtherInt is 5
+
+3 % 5 = 3
+
+overflow: if we go over primitive data type's limit then Java will wrap around and ?
+short x = (short) 19812345; // x value is 20473
+
+byte myByte = 127; // byte holds -128 ... 127
+myByte = myByte +1 ; // will not compile because byte is promoted to int for summing
+myByte++; // now myByte is -128 because overflow and Java wraps around
+
+compound assignment operators
+x *= z; // shortened form of x = x * z
+
+long a = 10;
+int b = 4;
+b= b * a; // does not compile because right side is promoted to long
+b *= a; // compiles. short for b = (int)(b * a)
+
+long c = 4;
+long d = (c = 2); // compiles. shorter form of c = 2; long d = c;
+
+conditional operators: exclusive 'or' operator: x^y is true if only one is true and only one is false
+
+inf f = 4;
+boolean g = false && (f++ < 4); // && is true only if both are true. first is false so the second is not evaluated/executed at all
+boolean h = (f-- == 4) && !g; // f == 4 is true, !g is true, so h is true. f is now 3
+
+primitive wrappers (Integer etc) can be compared with == like primitives
+-128.. 127 are in Integer cache. If number is larger then it is outside of cache and valueOf() creates new instance of Integer
+	So: Integer 127 == Integer 127 is true but Integer 128 == Integer 128 is false.
+
+if using Integer int1 = new Integer(1); then the type is Integer and == compares object references. Integer int1 = 1; casts to int
+
+object reference: System.identityHashCode(int1);
+
+char is represented as integer between 0 - 65535 and can be used in integer arithmetic
+
+primitives can't be null, other objects can be null (including primitive wrapper classes)
+
+char myCharA = 'A', myCharNum = '1';
+Character.isLetter(myCharA); 
+Character.isDigit(myCharNum);
+
+char letter = 65; // A. Bound through ASCII table
+int myInt = letter + 3; // char myInt = letter + 3 give compilation error because letter is cast to int for arithmetic operation
+char myNewLetter = (char)myInt; // D
+myNewLetter < 'E' is true
+
+byte x = 5;
+byte y = 10;
+int/long/double z = x +y; // will compile with int, long or double. 
+// long and double compile because they can be automatically promoted to int
+
+Q: What change woul allow the following code snippet to compile?
+3: long x = 10;
+4: int y = 2 * x;
+A: Cast x on line 4 to int, Change the data type of x on line 3 to short, Cast 2 * x on line 4 to int, Change the data type of y on line 4 to long.
+(2 * x is automatically promoted to long)
+
+
+Section 4:
+ternary operator: y = x > 5 ? 2 * x : 4 * x;
+if (x > 5) y = 2 * x;
+else y = 4 * x;
+
+System.out.println(y > 5 ? 10 : "Test"); // Test
+
+int a = 1, b = 1;
+int c = a < 10 ? a++ : b++;
+// now a == 1, b == 1, c == 2. b++ is not run because a < 10 is true
+
+int d = 1, e = 2, f = 3;
+if (d < 10) {
+	f = d++ < 1 ? e++ : f++;
+}
+// d == 2; e == 2; f == 3;. f++ is never executed because line assigns f = f;
+
+int dayofWeek = 0;
+switch (dayofWeek) {
+	case 0:
+		// do something
+		// break; // optional. switch will continue until first break
+	case 1:
+		// ...
+	default:
+		// 
+}
+
+Random rand = new Random();
+int c = rand.nextInt(26) + 'a'; // adding offset to produce lower case letters
+System.out.println((char)c + ", " + c + ": ");
+switch (c) {
+	case 'a':
+	case 'e':
+	i, o, u:
+		System.out.prinln("vowel");
+		break;
+	case 'y'
+	...
+
+cases must be constants, cannot be variable e.g. x
+
+
+}
+
+do-while loop
+do {} while ();
+
+on exam:
+int y = 10;
+int z = 5;
+while (y < 20)
+	y++;
+	z += 2;
+	y += 10;
+// y == 30, z == 7; notice the lack of brackets
+
+int a;
+for (a = 0; a < 10; a++){
+}
+// a == 10; because a++ then evaluate a < 10
+
+for (;;) {
+}
+// infinite loop
+
+int x = 0;
+for (int y = 0, z = 4; x < 5 && y < 10; x++, y++) {
+}
+// valid loop. declaring multiple variables
+
+int d = 10;
+for (int e = 0, d = 0; e < 10 || d < 10; e++, d--) {
+}
+// does not compile because d is already defined
+
+for (long z = 0, int d = 4; z < 10; z++) {
+}
+// does not compile. can't use/declare different types in for loop
+// can use long or double
+
+
+for (int i = 0; i < 10;) {
+		i = i++;
+}
+// infinite loop because i = i++ is i = i and i always stays 0
+
+int x1 = 50, x2 = 75;
+boolean b = x1 >= x2;
+if (b = true) System.out.println("Success");
+else System.out.println("Failure");
+// prints Success because b = true is assignment not comparison
+
+while x < 10
+y--;
+// does not compile. while needs ()
+
+do {
+	int y = 1;
+	System.out.println(y++ + "");
+} while (y <= 10);
+// does not compile because y is out of scope in while conditional
+
+final char a = 'A', d = 'D';
+char grade = 'B';
+switch (grade) {
+	case a:
+	case 'B': System.out.print("great");
+	case 'C': System.out.print("good"); break;
+	case d:
+	case 'F': System.out.print("not good");
+}
+// // greatgood. TODO: what is switch(grade)? ------------- don't understanding
+
+Section 5: Strings
+
+System.out.println(1 + 2 + "d"); // 3d
+System.out.println("result=" + number + anotherNumber); // result=1020 because evaluated from left to right
+
+String class is IMMUTABLE. Instance cannot be changed after creation e.g. adding two strings will create a new string.
+
+String s1 = "1";
+String s2 = s1.concat("2");
+s2.concat("3");
+// s1 is "s1", s2 is "12"
+
+String name = "John";
+String anotherName = "John";
+// name == anotherName is true, compares references. same reference because "John" is held in String Pool and anotherName points to same reference in order to save memory. Strings literals are POOLED (not variables that are calculated at runtime e.g. "a" + x)
+String john = "Jo" + "hn"; // == name is true
+String newName = new String("John"); // new keyword creates new String in memory
+
+System.identityHashCode(object) shows object's hash code / kinda memory location
+
+String str1 = "abc";
+String str2 = "ab";
+String str3 = str2 + "c";
+// str1 == str3 false because str2 is variable so addition is calculated at runtime and creates a new string. String str3 = "ab" + "c" would be == str1 because it is constant
+
+str.equals evaluates String contents (if they have same characters). EQUALS
+
+String str = "java is fun";
+str.indexOf(ch: "a", fromIndex: 2);
+str.indexOf("fun");
+// indexOf==-1 means match not found
+str.substring(0, 5); // java (java AND space (space is trick on exam))
+str.substring(4, 4) // returns empty string
+str.substring(4, 2) // StringIndexOutOfBoundsException
+str.substring(4, 14) // StringIndexOutOfBoundsException
+
+str.startsWith("jav"); // true
+str.endsWith("abc"); // false
+str.contains("av"); // true
+
+str.replace(oldChar: "a", newChar: "A");
+str.replace("is", "_"); // "java _ fun"
+// str is still "java is fun"
+
+str.trim(); // removes spaces at start and end of string
+String a = "Java";
+String b = "Java".trim();
+// a==b false because String methods return new String instance
+
+method chaining: "  Java  ".trim().toLowerCase().replace("j", "J"); // Java
+
+StringBuilder class is MUTABLE.
+StringBuilder sb = new StringBuilder();
+sb.append("a"); // add char to StringBuilder, reuses StringBuilder without creating new string (so same reference)
+
+StringBuilder builder = new StringBuilder("start");
+builder.append("-middle");
+StringBuilder anotherBuilder = builder.append("-end");
+// builder == anotherBuilder is true because builder.append returns reference which doesn't change because StringBuilder is mutable even though content changes
+
+append can use all primitives. sb.append(true) appends "true"
+
+StringBuilder has length which shows how many characters it currently holds.
+StringBuilder has capacity which shows how many characters it can hold. It is automatically increased when needed.
+
+StringBuilder a = new StringBuilder("This ");
+StringBuilder b = a.append("Java ");
+b = b.append("is").append(" so ").append("Cool");
+System.out.println(a);
+System.out.println(b);
+// they print the same string because StringBuilder is mutable and a's object reference doesn't change. b has same reference because b = a.append which returns a's reference
+
+StringBuilder has methods charAt, indexOf, length, substring, append, insert, delete, deleteCharAt, reverse, toString
+StringBuilder has REVERSE method!
+
+StringBuilder sb = new StringBuilder("programming");
+sb.insert(offset: 7, str: "-"); // "program-ming". inserts "-" at index 7
+sb.insert(2, 2);
+System.out.println(sb); // "pr2ogram-ming". don't need to assign to sb
+
+sb.delete(4, 9); // deletes from index 4 to index 9 [)
+sb.delete(2); // deletes character at index 2
+sb.delete(2, 1); // index out of bounds exception
+sb.delete(1, 1); // doesn't change anything
+
+String s1 = "java";
+StringBuilder s2 = new StringBuilder("java");
+s1 == s2 doesn't compile
+
+StringBuilder b = "rumble"; // doesn't compile! not new StringBuilder. PAY ATTENTION!
+
+String letters = "abcdef";
+letters.charAt(6); compiles but throws exception
+letters.substring(2, 1); // compiles but throws exception
+
+
+
+Section 6: Arrays
+
+int[] one = new int[]{5, 2, 4};
+int[] two = new int[3]; // array with size 3. contains zeros
+
+anonymous array. no type on right side
+int[] three = {10, 11, 12};
+int[] four = {};
+
+int[] five, six; // creates two arrays
+int seven[], eight; // creates an array and an int
+
+String[] animals = {"Parrot", "Dog", "Cat"};
+String[] myAnimals = animals;
+// animals.equals(myAnimals) is defined as animals == myAnimals, reference check
+
+check array content: Arrays.equals(animals, myAnimals);
+
+printLn(animals) give memory location
+PRINT ARRAY: Arrays.toString(animals) gives "[Parrot, Dog, Cat]"
+
+Arrays.toString(new int[5]) gives array with five zeros
+Arrays.toString(new Integer[5]) gives array with five nulls because Integer is not primitive and Objects by default are null
+Arrays.toString(new String[5]) gives array with five nulls because String is not primitive
+
+numbers.length NOT numbers.length(). length is not a method
+
+StringBuilder[] builders = {new StringBuilder("For"), new StringBuilder("Loop")};
+for (StringBuilder builder : builders){
+	builder.append("123");
+} 
+// SB is mutable so now builders has For123 and Loop123
+
+looping through String
+String pets = "Parrot";
+for (char c : pets.toCharArray()) { }
+
+Label is an optional pointer that allows the application to jump to the label or break from the loop. 
+Labels can be on code blocks {}. Can't be on variables.
+MY_LOOP: for (String animal : animals) {
+	if(animal.equals("Cat")) break MY_LOOP; // label is optional. jumps out of the loop
+}
+IF LABEL IS USED THEN BREAK AND CONTINUE MUST HAVE LABELS TOO!
+
+continue statement skips the current iteration in loop
+for (String animal : animals) {
+	if(animal.equals("Cat")) continue; // only "Cat" is not printed
+	System.out.println(animal);
+}
+
+array sorting: Arrays.sort(myArray);
+
+searching arrays: (<-- ON EXAM. ARRAY MUST BE SORTED FOR SEARCH TO WORK!)
+	element found -> result is index of found element
+	element not found -> negative value, showing 1 smaller than the negative of index where a match needs to be inserted to preserve sorted order
+	UNSORTED ARRAY -> result not predictable / undefined result 
+	
+int[] numbers = {1, 3, 4, 6, 7};
+Arrays.binarySearch(numbers, 2); // array and key
+
+variable arguments: number of method arguments is variable, must be same type
+ON EXAM: both main method declarations are valid
+public static void main(String[] args) {}
+public static void main(String... args) {System.out.println(args.length);}
+String[] and String... are not the same
+
+multidimensional arrays {{}, {}, {}}
+OUTER:
+for (int[] rowArray : myArray) {
+	INNER:
+	for (int i = 0; i < rowArray.length; i++) {
+		if (rowArray[i] % 2 == 0) break OUTER; // breaks to outer (leaves both loops)
+	}
+}
+continue INNER, continue OUTER
+
+int x = 10;
+while (x > 0) {
+	do {
+		x -= 1;
+	} while ( x > 5); // IMPORTANT ;
+	x--;
+	System.out.println(x);
+}
+// 4, 2, 0. do until x==5 then x-- then print. do once since x<=5 then x-- then print
+
+ON EXAM:
+when declaring multidimensional arrays, the first size is always required
+int[][] arr= new int[][] does not compile
+COMPILES: Date[] dates[] = new Date[2][];
+COMPILES: Object[][][] cubbies = new Object[3][0][5];
+
+FOR EACH loop is also called ENHANCED FOR Loop
+
+cases in switch case can't have same value
+
+
+Section 7: ArrayList
+ArrayList myList = new ArrayList();
+ArrayList<Object> myList = new ArrayList<Object>();
+ArrayList<String> myList = new ArrayList<>();
+ArrayList<String> myList = new ArrayList<>(intialCapacity: 20);
+ArrayList will automatically resize
+
+List<String> myList = new ArrayList<>(); // polymorphism. ArrayList implements interface List
+
+ArrayList<String> myList = new List<>(); // doesn't compile. can't create interface instance
+
+System.out.println(myList); // [dog, cat]
+
+myList.add("dog");
+myList.add(index: 0, element: "cat");
+[cat, dog]
+
+myList.remove("cat);
+myList.remove(index: 2);
+
+myList.set(index: 0, "newPet"); // replace element at index 0
+
+isEmpty(), size()
+clear() // removes all elements. size to 0
+contains("cat")
+
+ArrayList equals method checks if two lists have the same elements in the same order
+
+// doesn't compile. primitives are not classes !!!
+List<double> doubleList = new ArrayList<>();
+can use wrapper Double
+
+double first = doubleList.get(0); // unboxing to primitive
+doubleList.add(null); // works. [null]
+int number = doubleList.get(0); // NullPointerException. int can't hold null !!!
+
+List<Integer> nums = new ArrayList<>();
+nums.add(1); // at index 0
+nums.add(2); // at index 1
+nums.remove(1);
+[1] because the remove method used remove(index: 1) !!!
+nums.remove(new Integer(1)); // remove(Object o)
+
+List<String> names = new ArrayList<>();
+names.add("Tony");
+names.add("Jimmy");
+Object[] namesArray = names.toArray(); // this method returns Object[]
+
+String[] stringArray = names.toArray(new String[0]); // array automatically resized to necessary length. toArray(T[]) specifies type of array to convert to
+
+String[] stringArray = names.toArray(new String[names.size()]);
+
+String[] petsArray = {"dog", "cat", "parrot"};
+List<String> petsList = Arrays.asList(petsArray); // convert array to List
+List<String> petsList = Arrays.asList("dog", "cat", "parrot"); // returns fixed size list which means you can't add or remove elements!!! UnsupportedOperationException
+petsArray and petsList are linked!!! changing element in one changes element in other. ON EXAM
+
+Arrays.toString(petsArray); // [dog, cat, parrot]
+
+// sorting
+Collections.sort(numsList);
+// strings are sorted alphabetically / lexicographically
+
+// searching. binarySearch result for unsorted list is undefined !!!
+Collections.binarySearch(numsList, key: 10); // returns index. undefined index < 0
+
+List<Integer> numbers = new ArrayList<>();
+numbers.get(index);
+
+we can't modify list that we are iterating through with for loop!!!
+for (Integer number: numbers) {
+numbers.remove(index: 2); // ConcurrentModificationException
+}
+
+// can modify list while iterating with Iterator . Iterator type same as List
+for(Iterator<Integer> iterator = numbers.iterator(); iterator.hasNext(); ) {
+Integer number = iterator.next();
+iterator.remove();
+}
+
+ListIterator has more methods than Iterator. can only be used with List
+for (ListIterator<Integer> listIterator = numbers.listIterator(index: 3); listIterator.hasPrevious(); ) {
+// iterating backwards with hasPrevious()
+// hasNext, next, hasPrevious, previous
+// can add elements. ListIterator has that method
+}
+numbers.listIterator(index: 3); // iterates from index 3
+numbers.listIterator();
+
+String[] stringArray = new String[10_000_000]; // can write number like this
+
+array and ArrayList are ordered!!! (they have index)
+
+two ArrayLists with the same content are equal (Arrays.equals also checks order)
+if you call remove(0) usig an empty ArrayListobject it will compile successfully but won't run. compiler won't know if index is out of bounds
+
+String[] names = {"Tom", "Tommy", "Harry"};
+List<String> list = names.asList(); // won't compile. array doesn't have this method. it is in Arrays class
+
+List<String> one = new ArrayList<Strin>();
+one.add("abc");
+List<String> two = new ArrayList<Strin>();
+one.add("abc");
+if (one == two) System.out.println("A");
+else if (one.equals(two)) System.out.println("B");
+else System.out.println("C");
+// B. == compares references. ArrayLists are equal if they have the same elements in the same order.
+
+List<Integer> ages = new ArrayList<>();
+ages.add(Integer.parseInt("5"));
+ages.add(Integer.valueOf("6"));
+ages.add(7);
+ages.add(null);
+for (int age : ages) System.out.print(age);
+// code compiles. code throws runtime exception. two statements use autoboxing (parseInt and add(7) convert int to Integer. valueOf converts String to Integer. parseInt converts String to int. runtime exception because in the for loop it tries to unbox null to int and that fails.
+
+
+Section 8: Methods
+access modifiers:
+public: accessed by all
+private: can be accessed only from within the class
+protected: accessed from same package or subclass
+default / package private : from the same package, not subclass
+
+ public static final void method() {}
+ public static final void method() {}
+ static final public void method() {}
+ order of keywords doesn't matter except return_type must always be right before method name. () and {} must always be present
+
+first character can't be a number in method or variable name
+$method and _method are allowed
+
+// methods with variable arguments
+variable argument must be last element in arguments list. method can have only one vararg
+public void method(int... numbers) {}
+public void method(int[] numbers) {} // same as the previous one. override not overload
+public void method(int arg1, int... numbers) {}
+
+public static void method(int start, int... numbers) {
+numbers.length
+}
+method(1); // vararg number can be 0. Java will create empty array
+method(1, 5, 6, 7);
+method(1, new int[]{5, 6, 7}); // redundant array creation
+method(1, null);
+
+static keyword means that field or method doesn't need instantiation to be used
+can't access non-static methods from within a static method !!!
+a static variable is shared between all instances !!!(e.g. class creation counter)
+setting static variable value in one instance of class will set it in all instances
+
+public class Counter {
+public static int count;
+
+public Counter() {
+count++;
+}
+}
+Counter one = new Counter();
+Counter two = new Counter();
+Counter three = new Counter();
+System.out.println(one.count);
+System.out.println(two.count);
+System.out.println(three.count);
+// all print three because static variableis shared between all instances
+
+can't assign new value to final variable but you can change its content
+private static final List<String> VALUES = new ArrayList<>();
+VALUES.add("changed");
+
+Static initializer
+public class StaticInitialization {
+prive static final int SIZE;
+prive static final int ONE;
+
+// uninitialized final variables can only be assigned in static initializer
+static {
+SIZE = 5;
+ONE = 1;
+}
+}
+static variables must be initialized!!! otherwise compilation error
+class can have multiple static initializers. order of initializers matters
+
+passing variable to method as argument creates a copy of the variable for use in the method. original variable is not changed
+
+StringBuilder sb = new StringBuilder();
+build(sb);
+System.out.println(sb);
+public static void build(StringBuilder s) {
+s.append("Tom");
+}
+// prints Tom. both StringBuilders sb and s have same reference. calling method on one affects the other
+
+Overloaded methods: same name but different parameter types/numbers. return types and access modifiers can be different!!!
+what will be called for jump(1, 2):
+1. exact match by type: public void jump(int a, int b){}
+2. larger primitive type:  public void jump(long a, long b){}
+3. autoboxed type: public void jump(Integer a, Integer b){} // superclass. Object
+4. varargs: public void jump(int... numbers){}
+
+primitives can't be null!!! int, long etc
+
+if play() is static method in class Rope then Rope rope2 = null; rope2.play(); runs
+
+public class RopeSwing {
+private static final bench;
+
+public static void main(String[] args) {
+bench = "bench";
+}
+}
+// this code has two compiler errors. first because static variable bench is not initialized and second because bench = "bench"; tries to give new value to static variable
+
+import static Collections.sort; is the order of keywords. also works Collections.*
+import static Collections.sort(ArrayList<String>); doesn't compile
+
+Section 9: Class design
+
+
+public Dog() {} // constructor
+public void Dog() {} // NOT constructor but valid method declaration
+constructors are used to initialize instance variables
+
+this keyword refers to the instance of the class in which it is used
+
+if class doesn't have constructor then default constructor is used. it is generated ONLY IF no constructors are declared.
+
+constructors can have access modifiers. constructor can be private
+
+public Dog(String name) {
+// body
+this(name, "husky"); // calls constructor Dog(String name, String breed)
+}
+public Dog(String name, String breed) {
+// body
+}
+this() method calls constructor. MUST BE FIRST STATEMENT IN CONSTRUCTOR IF CALLED. otherwise compiler error
+calling this() is called constructor chaining
+can't be used outside of constructor
+
+// order of initialization
+1. if there is a superclass initialize it first
+2. static variable declarations and static initializers in the order they appear in the file
+3. instance variable declarations and instance initializers in the order they appear in the file
+4. the constructor
+
+class Example {
+{
+// instance initializer
+}
+static {
+// static initializer
+}
+}
+
+data encapsulation is used to hide implementation from users. make variable e.g. List private so it can't be set to null from outside of class
+getters, setters to manipulate these variables. add null checks to prevent setting variables to null or add other constraints to avoid errors!!!
+
+final class means that it can't have subclasses / be inherited from
+
+to make class immutable make variables private and don't have setters. read-only class. immutable class variables are usually final. only way to set final variables is through constructor
+
+//class inheritance
+class Animal, class Dog extends Animal, class Husky extends Dog
+calling Husky() calls super class constructors so Animal, Dog, Husky in that order. first line of code in constructor is generated call to super()
+
+if parent class has defined constructor then that constructor MUST be called in subclass' constructor !!!
+if there is constructor Dog(int age) then default constructor is no longer generated and Husky constructor must have as first statement super(age) because otherwise java will try to generate statement super() and compiler will throw error because such a constructor doesn't exist
+
+// constructor definition rules
+1. the first statement of every constructor is a call to another constructor within the same class using this(), or a call to parent class constructor using super()
+2. if super() call is not declared in a constructor then the compiler will insert no argument super() as the first statement of the constructor
+3. the super() call can't be used after the first statement of the constructor
+4. if the parent class doesn't have a no-argument constructor and the child doesn't define any constructors then the compiler will show an aerror and try to insert a default n-argument constructor into child class
+5. if the parent doesn't have a no-arguments constructor then the compiler requir3es an explicit call to a parent constructor in each child class !!!!!!
+
+we can't override private or final methods !!!
+
+overridden method MUST have same return type, method name and parameters
+overloaded methods have same name and different parameters. can have different return types
+
+overridden method in subclass can have higher access modifier than method in superclass but can't have lower access modifier
+
+// abstract class definition rules
+1. abstract classes can't be instantiated directly
+2. abstract classes can't be private or final
+3. the first concrete class that extends an abstract class MUST provide implementation for all of the inherited abstract methods
+4. abstract classes can have abstract methods
+
+Abstract class: is a restricted class that cannot be used to create objects (to access it, it must be inherited from another class).
+
+Abstract method: can only be used in an abstract class, and it does not have a body. The body is provided by the subclass (inherited from).
+
+// abstract method definition rules
+1. abstract methods can only be defined in abstract classes !!!
+2. abstract methods can't be declared private or final
+3. abstract methods must not provide a method body / implementation in the abstract class in which it is declared
+4. implementing an abstract method in a subclass follows the same rules for overriding a method e.g method signature must be the same and access modifier needs to be the same or higher
+
+method can't be static and abstract at the same time
+
+public abstract void getWeight();
+
+abstract class can have non-abstract methods
+
+// interface
+public interface CanFly {
+int DEFAULT_HEIGHT = 5;
+
+void fly(int height);
+}
+// interface methods are public abstract by default !!! interface methods can't have body
+// interface variables are public static final by default
+
+An interface is a completely "abstract class" that is used to group related methods with empty bodies
+Interfaces specify what a class must do and not how. It is the blueprint of the class.
+
+public class Dog extends Animal implements HasTail, CanRun {...}
+
+interface can extend other interfaces
+
+//default interface method rules
+1. default methods can only be created within an interface and not within a class or abstract class
+2. default methods must be marked with default keyword and provide default implementation (needs to have body) !!!
+3. default method is not assumed to be static final or abstract as it may be used or overridden in classes that implement the interface
+4. default method is assumed to be public and it will not compile if marked as private or protected !!!
+
+default method is new since Java 8
+
+default method is abstract method in interface with a method body and can be overriden in implementation (otherwise default implementation is used)
+
+default void getWeight() {}
+default method doesn't have to be overridden in interface implementing class
+
+// interface static method rules
+1. static method in interface is assumed to be public and will not compile if marked as private or protected
+2. to reference static method, a reference to the name of the interface must be used
+
+interface static method are since Java 8
+
+if you implement two interface with the same static methods then the code will still compile because static methods are not inherited
+
+public interface Hop {
+static int getAverageJumpHeight() {
+return 2;
+}
+}
+
+// polymorphism
+casting is not required if object is reassigned to a supertype or interface of the object
+an object can be accessed with a reference as the same type, superclass or implemented interface of the object
+
+Husky husky = new Husky();
+Dog dog = husky; // another reference to Husky object in memory !!!
+LEFT SIDE IS REFERENCE AND RIGHT SIDE IS OBJECT IN MEMORY !!!
+now husky can access methods that are only available to Dog class eg.g husky.printDetails()
+
+Animal cat = new Cat();
+Cat myCat = cat; // will not compile
+Cat myCat = (Cat) cat; // will compile
+
+// virtual method
+a virtual method is a method whose implementation is not knwon until runtime
+
+in java all methods that are not static or final or private are considered virtual methods because they can be overridden !!!
+
+Animal rabbitAnimal = new Rabbit();
+rabbitAnimal.printDetails();
+// at first (in IDE) compiler thinks that animal.printDetails() is used but during compile the method is resolved to overridden method Rabbit.printDetails()
+
+// polymorphic parameters
+Collections.sort(List<T> list); // can use as parameter any instance of a class that implements the List interface
+
+interface methods are all implicitly public
+static or default method in interface must have body
+
+both abstract classes and interfaces can contain public static final variables, can be extended, can contain static methods, can't be instantiated directly
+
+only interfaces can contain default methods
+interface doesn't inherit from java.lang.Object
+
+overriding method must have same return type (or in same hierarchy)
+
+Section 10: Date and Time in Java 8 API
+Date is immutable
+
+// before java 8
+new Date()
+
+localDateTime.minusHours(10).plusDays(3);
+
+LocalTime doesn't have date and plusDays
+LocalDate doesn't have time and plusMinutes
+
+Period class
+
+DateTimeFormatter
+
+DateTimeFormatter dtf = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM dd yyyy");
+LocalDate date = LocalDate.parse("02 15 2010", formatter);
+
+LocalDate.of(2012, 6, 21);
+LocalDate.of(2012, Month.JUNE, 21);
+
+LocalDate.of(2012, Month.JUNE, 40); // runtime exception
+
+date.plusDays(2) returns new LocalDate value and doesn't change date variable. Dates are immutable
+
+Section 11: Exceptions
+ON EXAM have to recognize if exception is checked or unchecked
+unchecked exceptions are any exceptions that extend RuntimeException. these classes hafve to be memorized for exam
+
+doesn't compile because second catch is never reached
+try{}
+catch (superclass) {}
+catch (class) {}
+the order of catch blocks is important.
+
+try {
+return 10/0;
+} catch (ArithmeticException e) {
+System.out.println("error");
+return 1;
+} finally {
+System.out.println("finally");
+return 0;
+}
+error, finally, 0
+because the finally block is always executed
+without return 0 code resultis error, finally, 1
+adding System.exit(0); before return 1; results in result error. finally is not executed
+if try has return 10/1 then code still returns 0 from finally
+
+Runtime exceptions are the same thing as unchecked exceptions
+
+you can declare method with Exception as the return type
+you can declare any subclass of Error in the throws part of a method declaration
+you can declare any subclass of Exception in the throws part of a method declaration
+you can declare any subclass of RuntimeException in the throws part of a method declaration
+
+Section 12: Simple Lambda Expressions
+we can use functional programming since Java 8
+
+List<Animal> animals;
+Animal implements interface CheckAnimal that has boolean method canSwim
+print(animals, animal -> animal.canSwim()); // filters the list
+
+syntax: (Animal animal) -> {return animal.canJump();}
+optional parameter type, parameter name, arrow, body in {} block
+
+Animal fish, rabbit
+print(fish, rabbit, (first, second) -> checkTwoAnimals(first, second))
+print(fish, rabbit, (first, second) -> first.canJump() && second.canJump())
+parameters MUST be in brackets (first, second)
+
+// Predicate interface
+Predicate<String> filter
+filter.test("some string"); // returns boolean. accepts any class T
+
+List interface has method removeIf(Predicate)
+List<String> names
+names.removeIf(str -> str.charAt(0) == 'J');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
